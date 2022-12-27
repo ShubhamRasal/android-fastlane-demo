@@ -1,0 +1,39 @@
+{
+    "project_info": {
+      "project_number": "601222541077",
+      "project_id": "fir-73be7",
+      "storage_bucket": "fir-73be7.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:601222541077:android:dcb8a61407e7ae3d5c431c",
+          "android_client_info": {
+            "package_name": "com.ort.edu.helloworld.dev"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "601222541077-l6mqatkdspr8jpv2qmum53sn5a7vnab7.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyD0c1zez8l5H7AqD-aoldc-ryQAVdaGnks"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "601222541077-l6mqatkdspr8jpv2qmum53sn5a7vnab7.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }

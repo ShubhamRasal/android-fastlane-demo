@@ -1,0 +1,5 @@
+<en-US>
+- Added ability to like any message in the chat room.
+- Improved calendar scheduling.
+- Safe document sharing from Google Drive and Dropbox.
+</en-US>

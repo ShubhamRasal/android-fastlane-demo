@@ -1,0 +1,30 @@
+Hello QA,
+
+Please find the latest Mobile build for the  Sprint 3 for testing.
+
+Environment: development
+
+Build Version: x.x
+
+Green light Features (Testable Features):
+1. added delay for call disconnect
+Client Changes: N/A
+
+Smoke Testing for Dev: NA
+Smoke Testing Issues: N/A
+
+Unit Testing: N/A
+
+Build Branch: Development
+
+Resolved issues: NA
+
+Known issues : NA
+
+Platform/Devices: Samsung Galaxy s6/ Oppo f5
+
+Additional Information:NA
+
+
+Regards,
+Ashwin.

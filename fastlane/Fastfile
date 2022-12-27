@@ -1,0 +1,122 @@
+platform :increase do
+  desc "Responsible for fetching version code from play console and incrementing version code."
+  
+  lane :firebase_version_code do
+    latest_release = firebase_app_distribution_get_latest_release(
+      app: ENV["APP_ID"],
+      firebase_cli_token: ENV['FIREBASE_CI_TOKEN']
+    )
+    increment_version_code(
+      { version_code: latest_release[:buildVersion].to_i + 1 }
+    )
+  end
+end  
+
+
+default_platform(:android)
+platform :android do
+  
+  desc "developement build"
+  lane :debug do |options|
+    puts "Developement build"
+
+    gradle(
+      task: "assemble",
+      build_type: "debug",
+      flags: "--no-daemon",
+
+      properties: { 
+        "android.injected.signing.store.file" => "demoDev.jks",
+        "android.injected.signing.store.password" => "Demo@123",
+        "android.injected.signing.key.alias" => "demoDev",
+        "android.injected.signing.key.password" => "Demo@123",
+      }
+    )
+    slack_send("Development build successfully completed.")
+
+    firebase_app_distribution(
+      app:ENV['APP_ID'],
+      groups: "Internal",
+      release_notes: File.read("../releaseNotes.txt"),      
+      firebase_cli_token: ENV['FIREBASE_CI_TOKEN']
+    )
+   slack_send(":tada: Hooooooorrrayyyyy!!! Development Build is successfully uploaded on Firebase Distribution!! :dancer::man_dancing:")
+  end
+
+
+  desc "staging build"
+  lane :staging do |options|
+    puts "staging build"
+
+    gradle(
+      task: "assemble",
+      build_type: "staging",
+        flags: "--no-daemon",
+      properties: { 
+        "android.injected.signing.store.file" => "demoStag.jks",
+        "android.injected.signing.store.password" => "demo@123",
+        "android.injected.signing.key.alias" => "demo",
+        "android.injected.signing.key.password" => "demo@123",
+      }
+    )
+
+    slack_send("Staging build successfully completed.")
+
+    firebase_app_distribution(
+      app:ENV['APP_ID'],
+      groups: "Internal",
+      release_notes: File.read("../releaseNotes.txt"),      
+      firebase_cli_token: ENV['FIREBASE_CI_TOKEN']
+    )
+   slack_send(":tada: Hooooooorrrayyyyy!!! Staging Build is successfully uploaded on Firebase Distribution!! :dancer::man_dancing:")
+
+  end
+
+  desc "release build"
+  lane :release do |options|
+    puts "release build"
+
+    gradle(
+      task: "bundle",
+      build_type: "release",
+        flags: "--no-daemon",
+      properties: { 
+       "android.injected.signing.store.file" => "demo.jks",
+        "android.injected.signing.store.password" => "demo@123",
+        "android.injected.signing.key.alias" => "demo",
+        "android.injected.signing.key.password" => "demo@123",
+     }
+    )
+
+    slack_send("Release build successfully completed.")
+
+
+    # upload internal AAB to Google Play
+    supply(
+      track: 'alpha',
+      json_key: 'pc-api-gpc-key.json'
+    )
+   slack_send(":tada: Hooooooorrrayyyyy!!! Release Build is successfully uploaded on Google Play Console Alpha(Closed Testing)!! :dancer::man_dancing:")
+
+  end
+
+  desc "Clean"
+  lane :clean do
+    puts "Clean lane"
+    gradle(
+      task: 'clean'
+    )
+  end
+
+end #android lane
+
+
+def slack_send(messge_send,msg_payload=[ ],x_payload={})
+    slack(
+          message: messge_send,
+          success: true,
+          channel: '#'+ENV['CHANNEL'], 
+          default_payloads: msg_payload,
+          payload: x_payload
+        )
+end
